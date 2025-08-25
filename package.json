@@ -1,0 +1,32 @@
+{
+  "name": "user_mangement_api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"node app.js",
+    "dev":"nodemon app.js",
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sanmijingbrahma/user_mangement_api.git"
+  },
+  "author": "san",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sanmijingbrahma/user_mangement_api/issues"
+  },
+  "homepage": "https://github.com/sanmijingbrahma/user_mangement_api#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
