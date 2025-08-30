@@ -3,11 +3,11 @@ const express = require("express");
 const app = express();
 const bcrypt = require("bcrypt");
 const jwt= require("jsonwebtoken");
-
 const pool = require("./db");
-
 const PORT = process.env.PORT || 8000;
 const JWT_SECRET= process.env.JWT_SECRET;
+
+const authMiddleware = require("./middlewares/authMiddleware");
 
 
 app.use(express.json());
@@ -49,13 +49,13 @@ app.post("/api/login", async (req,res)=>{
         if(!user){
             res.status(400).josn({error:"invalid credentials"})
         }
-        const match = await bcrypt.compare(password,user.hashPassword);
+        const match = await bcrypt.compare(password,user.password_hash);
         if(!match){
             res.status(400).json({error:"invalid credentials"});
         }
         
         const token = jwt.sign(
-            {id:user.id,email:user.email},
+            {id:user.id, email:user.email},
             JWT_SECRET,
             {expiresIn:"15m"},
         )
@@ -67,6 +67,10 @@ app.post("/api/login", async (req,res)=>{
         res.status(500).json({"message":"Server Error"})
 
     }
+})
+
+app.get("/api/me",authMiddleware,(req,res)=>{
+    res.status(200).json({message:"Your are authenticated"},req.user);
 })
 
 
