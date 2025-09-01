@@ -29,10 +29,11 @@ app.post("/api/register", async (req,res)=>{
         const hashPassword = await bcrypt.hash(password,saltRounds);
 
         const user = await pool.query("INSERT INTO users(name,email,password)VALUES($1,$2,$3) RETURNING id,name,email",[name,email,hashPassword]);
-        res.json(user.rows[0]);
+        res.status(201).json(user.rows[0]);
 
     }catch(err){
-        res.status(500).json({"message":"Server Error"})
+        console.error("Register Error",err);
+        res.status(500).json({"message":"Server Error"});
 
     }
 })
