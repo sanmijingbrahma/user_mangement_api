@@ -16,7 +16,7 @@ pool.connect()
 .catch((err)=>{
 
         console.error(`Database not connected : ${err.stack}`);
-        client.exit(1);
+        process.exit(1);
     })
 
 
