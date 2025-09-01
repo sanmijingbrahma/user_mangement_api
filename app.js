@@ -28,11 +28,10 @@ app.post("/api/register", async (req,res)=>{
         const saltRounds = 10;
         const hashPassword = await bcrypt.hash(password,saltRounds);
 
-        const user = await pool.query("INSERT INTO users(name,email,password_hash)VALUES($1,$2,$3) RETURNING id,name,email",[name,email,hashPassword]);
+        const user = await pool.query("INSERT INTO users(name,email,password)VALUES($1,$2,$3) RETURNING id,name,email",[name,email,hashPassword]);
         res.json(user.rows[0]);
 
     }catch(err){
-        console.error(err.message);
         res.status(500).json({"message":"Server Error"})
 
     }
@@ -49,7 +48,7 @@ app.post("/api/login", async (req,res)=>{
         if(!user){
             res.status(400).josn({error:"invalid credentials"})
         }
-        const match = await bcrypt.compare(password,user.password_hash);
+        const match = await bcrypt.compare(password,user.password);
         if(!match){
             res.status(400).json({error:"invalid credentials"});
         }
@@ -63,7 +62,6 @@ app.post("/api/login", async (req,res)=>{
         res.json({token});
 
     }catch(err){
-        console.error(err.message);
         res.status(500).json({"message":"Server Error"})
 
     }
