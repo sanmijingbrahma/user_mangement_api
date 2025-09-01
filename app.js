@@ -70,7 +70,37 @@ app.post("/api/login", async (req,res)=>{
 })
 
 app.get("/api/me",authMiddleware,(req,res)=>{
-    res.status(200).json({message:"Your are authenticated"},req.user);
+
+    res.status(200).json({message:"Your are authenticated"});
+})
+
+
+app.put("/api/me",authMiddleware, async (req,res)=>{
+    try{
+
+        const {name,email} = req.body;
+
+        const result = await pool.query("UPDATE users SET name=$1 WHERE email=$2 RETURNING name,email",[name,email] );
+        const user = result.rows[0];
+
+        res.status(200).json(user);
+    }catch(err){
+        res.status(500).json({"Error":err.message});
+    }
+})
+
+app.delete("/api/me",authMiddleware, async (req,res)=>{
+    try{
+
+        const {email} = req.body;
+
+        const result = await pool.query("DELETE FROM users WHERE email=$1 RETURNING name,email",[email] );
+        const user = result.rows[0];
+
+        res.status(200).json(user);
+    }catch(err){
+        res.status(500).json({"Error":err.message});
+    }
 })
 
 
